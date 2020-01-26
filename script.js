@@ -1,14 +1,12 @@
-// fetchin Json data
+// url for fetchin Json data
 let url = "https://kz.skif.me/coordinates.json";
-let data2 = [
-	["2019-06-28T07:33:03", 37.610225, 55.651365],
-	["2019-06-28T07:33:18", 37.610225, 55.651365],
-	["2019-06-28T07:33:38", 37.610225, 55.651365],
-	["2019-06-28T07:33:39", 37.610225, 55.651365],
-	["2019-06-28T07:33:40", 37.6107283333333, 55.6511716666667]
-];
-var map;
+
+// some global variables
+let map;
+let newArr = [];
+let currentPosition;
 // helpers functions
+// transformation of time to calculate the speed
 function transformDate(data) {
 	let transformedDate = [];
 	data.forEach(date => {
@@ -28,7 +26,7 @@ function transformDate(data) {
 	});
 	return transformedDate;
 }
-
+// calculation of the full time based on the start/end
 function calculateDate(data) {
 	let transformedDate = transformDate(data);
 	let start = transformedDate[0];
@@ -38,6 +36,8 @@ function calculateDate(data) {
 	//time in seconds
 	return timeInHours;
 }
+
+// speed calculation
 function calculateSpeed(distance, time) {
 	return distance / time;
 }
@@ -118,11 +118,11 @@ fetch(url)
 			container.appendChild(playBtn);
 			container.appendChild(pauseBtn);
 
-			//Animation of the MArker and the paning the map to it
+			//Animation of the MArker and paning the map to it
 			let timer;
 			playBtn.addEventListener("click", () => {
-				var count = 0;
-
+				//playing the animation from the first click
+				let count = 0;
 				if (newArr.length !== 0) {
 					timer = setInterval(function() {
 						if (count <= result.length - 1) {
@@ -141,6 +141,7 @@ fetch(url)
 						}
 					}, 30);
 				} else {
+					//playing the animation after the pause
 					timer = setInterval(function() {
 						if (count <= result.length - 1) {
 							currentPosition = [
@@ -185,7 +186,7 @@ fetch(url)
 				// get the new speed travled
 				let newTimeInHours = calculateDate(newArr);
 				let currentSpeed = calculateSpeed(newDistanceInKm, newTimeInHours);
-				console.table("new Speed : ", currentSpeed);
+				console.log("new Speed : ", currentSpeed);
 
 				//display static info
 				const infoContainer = document.querySelector(".updatedInfo");
@@ -205,7 +206,7 @@ fetch(url)
 
 		initMap();
 	});
-
+// another helpers functions
 // calculate the current PAth
 function calculatePath(data, pathArray) {
 	data.forEach(element => {
@@ -215,11 +216,9 @@ function calculatePath(data, pathArray) {
 		});
 	});
 }
-
-let newArr = [];
-let currentPosition;
+// find the index of the current position
 function findItemInArray(data, element) {
-	for (var i = 0; i < data.length; i++) {
+	for (let i = 0; i < data.length; i++) {
 		if (
 			data[i][0] == element[2] &&
 			data[i][1] == element[1] &&
