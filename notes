@@ -1,0 +1,8 @@
+- time 
+- localisation 
+- 213
+- Speed: Distance traveled divided by the time of travel. distance / time 
+i have to calculate the speed and the time between two positions start and end of the current Array 
+i have to make the marker move 
+i have to create the buttons 
+current speed = current distance /current time 
